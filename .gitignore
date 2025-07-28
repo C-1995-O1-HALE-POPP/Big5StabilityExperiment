@@ -3,3 +3,6 @@ ocean_classifier/big5_*
 *.log
 runs
 env
+
+*.pyc
+__pycache__

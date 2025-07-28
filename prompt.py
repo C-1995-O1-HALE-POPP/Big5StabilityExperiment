@@ -1,4 +1,3 @@
-# run_dialogues.py
 import os
 import json
 from dataclasses import dataclass
@@ -11,6 +10,7 @@ from copy import deepcopy
 import concurrent
 from threading import Lock, Semaphore
 from time import sleep
+import uuid
 # -------- Config --------
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # USER_MODEL = "gpt-4o-mini"
@@ -170,6 +170,7 @@ def run_assistant_for_script(assistant_key, client, cot, model_name, persona_pro
                 sleep(5)
                 continue
         return {
+            "uuid": uuid.uuid4(),
             "assistant": assistant_key,
             "starter": starter,
             "background": background,

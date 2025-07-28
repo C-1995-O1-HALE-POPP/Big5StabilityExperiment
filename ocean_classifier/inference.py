@@ -78,7 +78,7 @@ class Big5Inferencer:
             model.eval()
             self.models[trait] = model
 
-        logger.info("All 5 classifiers loaded successfully.")
+        logger.success("All 5 classifiers loaded successfully.")
 
     @torch.inference_mode()
     def score(self, text: str) -> Dict[str, Dict[str, Any]]:
@@ -150,24 +150,25 @@ def _split_text_by_length(text: str, max_chars: int) -> List[str]:
 # -----------------
 # Example Usage
 # -----------------
-if __name__ == "__main__":
-    cfg = InferenceConfig(
-        model_root=".",  # 修改为你的模型根目录
-        encoder_name=DEFAULT_ENCODER,
-        max_length=512,
-        batch_size=16,
-        threshold=0.5,
-        chunk_long_text=False
-    )
-    infer = Big5Inferencer(cfg)
+from loguru import logger
+class big5_classifier:
+    def __init__(self, model_root="./ocean_classifier", encoder_name=DEFAULT_ENCODER, max_length=512,
+            batch_size=16, threshold=0.5, chunk_long_text=True):
+        self.cfg = InferenceConfig(
+            model_root=model_root,  # 修改为你的模型根目录
+            encoder_name=encoder_name,
+            max_length=max_length,
+            batch_size=batch_size,
+            threshold=threshold,
+            chunk_long_text=chunk_long_text
+        )
+        self.infer = Big5Inferencer(self.cfg)
 
-    texts = [
-        "Thanks, Sharif. I'm fine now. Don't worry about it. I just needed a little help, that's all.",
-        "I love exploring new ideas, art, and music. Routine bores me to death."
-    ]
-    scores = infer.score_batch(texts)
-    for t, s in zip(texts, scores):
-        print("TEXT:", t)
-        for trait, info in s.items():
-            print(f"  {trait:18s} -> logit={info['logit']:.4f} prob={info['prob']:.4f} label={info['label']}")
-        print("-" * 80)
+    def inference(self, texts: List[str]) -> Dict:
+        scores = self.infer.score_batch(texts)
+        for t, s in zip(texts, scores):
+            logger.debug("TEXT:", t)
+            for trait, info in s.items():
+                logger.debug(f"  {trait:18s} -> logit={info['logit']:.4f} prob={info['prob']:.4f} label={info['label']}")
+            logger.debug("-" * 80)
+        return scores
