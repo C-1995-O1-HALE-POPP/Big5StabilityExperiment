@@ -109,7 +109,7 @@ def gen_user_dialogue_script(client: OpenAI, starter: str, n_rounds: int) -> Lis
         "- The 2nd user utterance you will generate.\n"
         "- The 3rd user utterance you will generate.\n"
         "...\n"
-        "- The {n}th user utterance you havwille generate.\n\n"
+        "- The {n}th user utterance you will generate.\n\n"
         "Do not include any additional text, index, number or explanations.\n"
         "Make sure each utterance is natural and flows from the previous one.\n"
         "Your output:\n"
